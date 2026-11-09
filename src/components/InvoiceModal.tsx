@@ -19,9 +19,7 @@ export function InvoiceModal({
 }: InvoiceModalProps) {
   const [customers, setCustomers] = useState<CustomerType[]>([]);
   const [customerId, setCustomerId] = useState(defaultCustomerId || "");
-  const [dueDate, setDueDate] = useState(
-    new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
-  );
+  const [dueDate, setDueDate] = useState("");
   const [taxRate, setTaxRate] = useState(18);
   const [discountRate, setDiscountRate] = useState(0);
   const [notes, setNotes] = useState("Thank you for your business. Please settle via bank transfer or card.");
@@ -34,6 +32,11 @@ export function InvoiceModal({
   useEffect(() => {
     if (!isOpen) return;
     if (defaultCustomerId) setCustomerId(defaultCustomerId);
+    if (!dueDate) {
+      const defaultDate = new Date();
+      defaultDate.setDate(defaultDate.getDate() + 7);
+      setDueDate(defaultDate.toISOString().split("T")[0]);
+    }
 
     const loadCustomers = async () => {
       try {
